@@ -1,30 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:omama/menus/models_card/model_detalis.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 
-StateProvider<MenuBar?> sideMenu = StateProvider((ref) {
+StateProvider<MenuBarModels?> sideMenu = StateProvider((ref) {
   return null;
 });
 StateProvider<int?> _selectedIndex = StateProvider((ref) {
   return null;
 });
 
-enum MenuBar { chats, localModels, modelsStore, settings, acknowledgement }
-
-class BarScreenButtons extends ConsumerWidget {
-  const BarScreenButtons({super.key});
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return _BarScreenButtonsState();
-  }
+enum MenuBarModels {
+  chats,
+  localModels,
+  modelsStore,
+  settings,
+  acknowledgement,
 }
 
-class _BarScreenButtonsState extends ConsumerWidget {
-  const _BarScreenButtonsState();
+class BarScreenButtons extends ConsumerStatefulWidget {
+  const BarScreenButtons({super.key});
+  @override
+  ConsumerState<BarScreenButtons> createState() => _BarScreenButtonsState();
+}
+
+class _BarScreenButtonsState extends ConsumerState<BarScreenButtons> {
   final _selectedColor = Colors.lightBlueAccent;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final sideMenuRead = ref.read(sideMenu.notifier);
+    final modDet = ref.read(modelDetails.notifier);
     final readIndex = ref.read(_selectedIndex.notifier);
 
     return Container(
@@ -34,21 +40,27 @@ class _BarScreenButtonsState extends ConsumerWidget {
         children: [
           IconButton(
             color: readIndex.state == 0 ? _selectedColor : null,
-            icon: Icon(Icons.menu),
+            icon: Icon(FluentIcons.reading_list_24_regular),
             onPressed: () {
               sideMenuRead.state =
-                  sideMenuRead.state != MenuBar.chats ? MenuBar.chats : null;
+                  sideMenuRead.state != MenuBarModels.chats
+                      ? MenuBarModels.chats
+                      : null;
+
               readIndex.state = readIndex.state != 0 ? 0 : null;
             },
           ),
           IconButton(
             color: readIndex.state == 1 ? _selectedColor : null,
-            icon: Icon(Icons.download_outlined),
+            icon: Icon(Icons.download_done),
             onPressed: () {
               sideMenuRead.state =
-                  sideMenuRead.state != MenuBar.localModels
-                      ? MenuBar.localModels
+                  sideMenuRead.state != MenuBarModels.localModels
+                      ? MenuBarModels.localModels
                       : null;
+              if (modDet.state != null) {
+                modDet.state = null;
+              }
               readIndex.state = readIndex.state != 1 ? 1 : null;
             },
           ),
@@ -57,8 +69,8 @@ class _BarScreenButtonsState extends ConsumerWidget {
             color: readIndex.state == 2 ? _selectedColor : null,
             onPressed: () {
               sideMenuRead.state =
-                  sideMenuRead.state != MenuBar.modelsStore
-                      ? MenuBar.modelsStore
+                  sideMenuRead.state != MenuBarModels.modelsStore
+                      ? MenuBarModels.modelsStore
                       : null;
               readIndex.state = readIndex.state != 2 ? 2 : null;
             },
@@ -73,8 +85,8 @@ class _BarScreenButtonsState extends ConsumerWidget {
                   icon: Icon(Icons.settings),
                   onPressed: () {
                     sideMenuRead.state =
-                        sideMenuRead.state != MenuBar.settings
-                            ? MenuBar.settings
+                        sideMenuRead.state != MenuBarModels.settings
+                            ? MenuBarModels.settings
                             : null;
                     readIndex.state = readIndex.state != 3 ? 3 : null;
                   },
@@ -84,8 +96,8 @@ class _BarScreenButtonsState extends ConsumerWidget {
                   color: readIndex.state == 4 ? _selectedColor : null,
                   onPressed: () {
                     sideMenuRead.state =
-                        sideMenuRead.state != MenuBar.acknowledgement
-                            ? MenuBar.acknowledgement
+                        sideMenuRead.state != MenuBarModels.acknowledgement
+                            ? MenuBarModels.acknowledgement
                             : null;
                     readIndex.state = readIndex.state != 4 ? 4 : null;
                   },

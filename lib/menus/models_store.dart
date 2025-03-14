@@ -35,7 +35,7 @@ class _ModelsStore extends ConsumerState<ModelsStore> {
             itemCount: 50,
             itemBuilder: (BuildContext context, count) {
               return StoreModelCard(
-                title: "deepSeek",
+                name: "deepSeek",
                 summary: "best model ever",
                 category: "Other",
                 readme: "full details",

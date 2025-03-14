@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:omama/menus/models_card/model_detalis.dart';
 
-class StoreModelCard extends StatefulWidget {
-  final String title;
+class StoreModelCard extends ConsumerStatefulWidget {
+  final String name;
   final String category;
   final String summary;
   final String readme;
@@ -9,7 +11,7 @@ class StoreModelCard extends StatefulWidget {
 
   const StoreModelCard({
     super.key,
-    required this.title,
+    required this.name,
     required this.category,
     required this.summary,
     required this.readme,
@@ -17,12 +19,14 @@ class StoreModelCard extends StatefulWidget {
   });
 
   @override
-  State<StoreModelCard> createState() => _StoreModelCard();
+  ConsumerState<StoreModelCard> createState() => _StoreModelCard();
 }
 
-class _StoreModelCard extends State<StoreModelCard> {
+class _StoreModelCard extends ConsumerState<StoreModelCard> {
   @override
   Widget build(BuildContext context) {
+    var mdetails = ref.read(modelDetails.notifier);
+
     return Container(
       margin: EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -35,11 +39,17 @@ class _StoreModelCard extends State<StoreModelCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(widget.title),
+          Text(widget.name),
 
           SizedBox(height: 10),
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              mdetails.state = ModelDetalis(
+                name: widget.name,
+                summary: widget.summary,
+                readme: widget.readme,
+              );
+            },
             child: Text(widget.summary, style: TextStyle(color: Colors.white)),
           ),
           SizedBox(height: 10),

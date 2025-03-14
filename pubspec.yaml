@@ -39,6 +39,8 @@ dependencies:
   flutter_rust_bridge: 2.8.0
   google_fonts: ^6.2.1
   flutter_riverpod: ^2.6.1
+  markdown_widget: ^2.3.2+6
+  fluentui_system_icons: ^1.1.273
 
 dev_dependencies:
   flutter_test:

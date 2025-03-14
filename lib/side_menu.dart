@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:omama/menus/mod.dart';
+import 'package:omama/menus/mod.dart' as mb;
+import 'package:omama/menus/models_card/model_detalis.dart';
 
 class SideMenu extends ConsumerStatefulWidget {
   const SideMenu({super.key});
@@ -13,12 +15,21 @@ class _SideMenu extends ConsumerState<SideMenu> {
   @override
   Widget build(BuildContext context) {
     var showSideMenu = ref.watch(sideMenu);
-    if (showSideMenu == null)
-      return SizedBox.shrink(); //I don't want to repaint or rebuild anything!!
+    var modelDetWatch = ref.watch(modelDetails);
 
+    return showSideMenu != null
+        ? menuScreen(context, showSideMenu, modelDetWatch)
+        : SizedBox.shrink(); //I don't want to repaint or rebuild anything!!
+  }
+
+  Widget menuScreen(
+    BuildContext context,
+    mb.MenuBarModels menuBar,
+    ModelDetalis? mDetailsWatch,
+  ) {
     return Container(
       padding: EdgeInsets.all(30),
-      width: 400,
+      width: 430,
 
       foregroundDecoration: BoxDecoration(
         borderRadius: BorderRadius.circular(40),
@@ -33,16 +44,18 @@ class _SideMenu extends ConsumerState<SideMenu> {
         border: Border.symmetric(),
         borderRadius: BorderRadius.circular(40),
       ),
-      child: Center(
-        child: switch (showSideMenu.name) {
-          "chats" => Placeholder(),
-          "localModels" => LocalModels(),
-          "modelsStore" => ModelsStore(),
-          "settings" => Placeholder(),
-          "acknowledgement" => Acknowledgement(),
-          _ => null,
-        },
-      ),
+      child: Center(child: mDetailsWatch ?? _getCurrentMenu(menuBar.name)),
     );
+  }
+
+  Widget? _getCurrentMenu(String menuName) {
+    return switch (menuName) {
+      "chats" => Placeholder(),
+      "localModels" => LocalModels(),
+      "modelsStore" => ModelsStore(),
+      "settings" => Settings(),
+      "acknowledgement" => Acknowledgement(),
+      _ => null,
+    };
   }
 }
