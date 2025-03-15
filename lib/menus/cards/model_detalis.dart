@@ -1,7 +1,8 @@
+// used to show the readme details of a given llm model
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:markdown_widget/markdown_widget.dart';
-import 'package:omama/menus/mod.dart';
 
 StateProvider<ModelDetalis?> modelDetails = StateProvider((ref) => null);
 

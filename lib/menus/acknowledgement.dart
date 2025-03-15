@@ -1,3 +1,5 @@
+// includes the copyrigt acknowledgment
+
 import 'package:flutter/material.dart';
 
 class Acknowledgement extends StatelessWidget {

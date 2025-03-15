@@ -1,15 +1,17 @@
+// download card to represent the llm model in the model store.
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:omama/menus/models_card/model_detalis.dart';
+import 'package:omama/menus/mod.dart';
 
-class LocalModelCard extends ConsumerStatefulWidget {
+class StoreModelCard extends ConsumerStatefulWidget {
   final String name;
   final String category;
   final String summary;
   final String readme;
   final List<(String, String)> varients;
 
-  const LocalModelCard({
+  const StoreModelCard({
     super.key,
     required this.name,
     required this.category,
@@ -19,10 +21,10 @@ class LocalModelCard extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<LocalModelCard> createState() => _LocalCard();
+  ConsumerState<StoreModelCard> createState() => _StoreModelCard();
 }
 
-class _LocalCard extends ConsumerState<LocalModelCard> {
+class _StoreModelCard extends ConsumerState<StoreModelCard> {
   @override
   Widget build(BuildContext context) {
     var mdetails = ref.read(modelDetails.notifier);
@@ -39,25 +41,8 @@ class _LocalCard extends ConsumerState<LocalModelCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Spacer(),
-              Text(widget.name),
-              Spacer(),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(),
-                  borderRadius: BorderRadius.circular(5),
-                  color: Colors.green,
-                ),
-                child: Text(
-                  widget.category,
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ],
-          ),
+          Text(widget.name),
+
           SizedBox(height: 10),
           TextButton(
             onPressed: () {
@@ -73,23 +58,30 @@ class _LocalCard extends ConsumerState<LocalModelCard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Expanded(
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(Colors.red),
-                  ),
-                  onPressed: () {},
-                  child: Text("remove", style: TextStyle(color: Colors.white)),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(),
+                  borderRadius: BorderRadius.circular(5),
+                  color: Colors.green,
+                ),
+                child: Text(
+                  widget.category,
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
+
               SizedBox(width: 10),
-              Expanded(
+              Flexible(
+                flex: 2,
                 child: ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: WidgetStateProperty.all(Colors.lightBlue),
                   ),
                   onPressed: () {},
-                  child: Text("load", style: TextStyle(color: Colors.white)),
+                  child: Text(
+                    "download",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
               SizedBox(width: 10),

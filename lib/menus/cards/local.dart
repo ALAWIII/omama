@@ -1,15 +1,17 @@
+// local card to represent the already downloaded llm models.
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:omama/menus/models_card/model_detalis.dart';
+import 'package:omama/menus/cards/mod.dart';
 
-class StoreModelCard extends ConsumerStatefulWidget {
+class LocalModelCard extends ConsumerStatefulWidget {
   final String name;
   final String category;
   final String summary;
   final String readme;
   final List<(String, String)> varients;
 
-  const StoreModelCard({
+  const LocalModelCard({
     super.key,
     required this.name,
     required this.category,
@@ -19,10 +21,10 @@ class StoreModelCard extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<StoreModelCard> createState() => _StoreModelCard();
+  ConsumerState<LocalModelCard> createState() => _LocalCard();
 }
 
-class _StoreModelCard extends ConsumerState<StoreModelCard> {
+class _LocalCard extends ConsumerState<LocalModelCard> {
   @override
   Widget build(BuildContext context) {
     var mdetails = ref.read(modelDetails.notifier);
@@ -39,8 +41,25 @@ class _StoreModelCard extends ConsumerState<StoreModelCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(widget.name),
-
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Spacer(),
+              Text(widget.name),
+              Spacer(),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(),
+                  borderRadius: BorderRadius.circular(5),
+                  color: Colors.green,
+                ),
+                child: Text(
+                  widget.category,
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+          ),
           SizedBox(height: 10),
           TextButton(
             onPressed: () {
@@ -56,30 +75,23 @@ class _StoreModelCard extends ConsumerState<StoreModelCard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(),
-                  borderRadius: BorderRadius.circular(5),
-                  color: Colors.green,
-                ),
-                child: Text(
-                  widget.category,
-                  style: TextStyle(color: Colors.white),
+              Expanded(
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all(Colors.red),
+                  ),
+                  onPressed: () {},
+                  child: Text("remove", style: TextStyle(color: Colors.white)),
                 ),
               ),
-
               SizedBox(width: 10),
-              Flexible(
-                flex: 2,
+              Expanded(
                 child: ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: WidgetStateProperty.all(Colors.lightBlue),
                   ),
                   onPressed: () {},
-                  child: Text(
-                    "download",
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  child: Text("load", style: TextStyle(color: Colors.white)),
                 ),
               ),
               SizedBox(width: 10),

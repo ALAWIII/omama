@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:omama/main_screen_components/bar.dart';
 import 'package:omama/menus/mod.dart';
-import 'package:omama/menus/mod.dart' as mb;
-import 'package:omama/menus/models_card/model_detalis.dart';
 
 class SideMenu extends ConsumerStatefulWidget {
   const SideMenu({super.key});
@@ -24,7 +23,7 @@ class _SideMenu extends ConsumerState<SideMenu> {
 
   Widget menuScreen(
     BuildContext context,
-    mb.MenuBarModels menuBar,
+    MenuBarModels menuBar,
     ModelDetalis? mDetailsWatch,
   ) {
     return Container(

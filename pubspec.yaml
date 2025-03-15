@@ -41,6 +41,7 @@ dependencies:
   flutter_riverpod: ^2.6.1
   markdown_widget: ^2.3.2+6
   fluentui_system_icons: ^1.1.273
+  smooth_list_view: ^2.0.2
 
 dev_dependencies:
   flutter_test:

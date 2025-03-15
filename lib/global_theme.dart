@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:google_fonts/google_fonts.dart';
 
-ThemeData global_theme() {
+ThemeData globalTheme() {
   return ThemeData(
     useMaterial3: true,
     colorScheme: ColorScheme.dark(

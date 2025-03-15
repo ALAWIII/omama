@@ -1,6 +1,8 @@
+// represents the store where you will download the models from
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:omama/menus/mod.dart';
+import 'package:smooth_list_view/smooth_list_view.dart';
 
 class ModelsStore extends ConsumerStatefulWidget {
   const ModelsStore({super.key});
@@ -30,7 +32,8 @@ class _ModelsStore extends ConsumerState<ModelsStore> {
         ),
         SizedBox(height: 30),
         Expanded(
-          child: ListView.builder(
+          child: SmoothListView.builder(
+            duration: Duration(seconds: 1),
             controller: scrollController,
             itemCount: 50,
             itemBuilder: (BuildContext context, count) {

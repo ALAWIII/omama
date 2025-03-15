@@ -1,6 +1,8 @@
+// includes the main side bar Icon buttons like chat,local models,model store ,settings , acknowledgement.
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:omama/menus/models_card/model_detalis.dart';
+import 'package:omama/menus/mod.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 
 StateProvider<MenuBarModels?> sideMenu = StateProvider((ref) {

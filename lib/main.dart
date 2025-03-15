@@ -13,7 +13,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
-      theme: global_theme(),
+      theme: globalTheme(),
       debugShowCheckedModeBanner: false,
       home: HomeScreen(),
     );
