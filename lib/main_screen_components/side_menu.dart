@@ -49,7 +49,7 @@ class _SideMenu extends ConsumerState<SideMenu> {
 
   Widget? _getCurrentMenu(String menuName) {
     return switch (menuName) {
-      "chats" => Placeholder(),
+      "chats" => ChatsHistoryScreen(),
       "localModels" => LocalModels(),
       "modelsStore" => ModelsStore(),
       "settings" => Settings(),
