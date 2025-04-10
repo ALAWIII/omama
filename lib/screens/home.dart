@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:omama/global_states.dart';
 import 'package:omama/main_screen_components/mod.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -34,7 +35,7 @@ class _HomeScreen extends ConsumerState<HomeScreen> {
           hoverColor: Colors.green,
           onPressed: () {},
         ),
-        actions: [Text("model : None "), SizedBox(width: 20)],
+        actions: [LoadedModelLabel(), SizedBox(width: 20)],
       ),
       body: Container(
         constraints: BoxConstraints(
@@ -62,5 +63,20 @@ class _HomeScreen extends ConsumerState<HomeScreen> {
         ),
       ),
     );
+  }
+}
+
+class LoadedModelLabel extends ConsumerStatefulWidget {
+  const LoadedModelLabel({super.key});
+
+  @override
+  ConsumerState<LoadedModelLabel> createState() => _LoadedModelLabel();
+}
+
+class _LoadedModelLabel extends ConsumerState<LoadedModelLabel> {
+  @override
+  Widget build(BuildContext context) {
+    var loadedText = ref.watch(loadedModel);
+    return Text(loadedText.toString());
   }
 }

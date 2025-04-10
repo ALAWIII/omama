@@ -1,0 +1,179 @@
+import 'dart:io';
+import 'package:dart_eval/dart_eval.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'dart:convert';
+
+import 'package:omama/cli_commands/data_model.dart';
+import 'package:omama/global_states.dart';
+
+T parseStringToJson<T>(String text) {
+  return json.decode(text);
+}
+
+class OmamaCli {
+  final String executable;
+
+  OmamaCli({
+    this.executable =
+        "/run/media/allawiii/projects/zed/Rust/omama_manager_cli/target/debug/omama_manager_cli",
+  });
+
+  Future<String?> _run<T>(List<String> args) async {
+    try {
+      final result = await Process.run(executable, args, runInShell: true);
+      if (result.exitCode == 0) {
+        return result.stdout;
+      } else {
+        stderr.write(result.stderr);
+        print("Exit code: ${result.exitCode}");
+      }
+    } catch (e) {
+      print("Command failed: $e");
+    }
+  }
+
+  // --- Root-level options ---
+  Future<OChat> createChat() async {
+    final result = await _run(["--create-chat"]);
+    return OChat.fromJson(parseStringToJson(result!));
+  } // Chat
+
+  Future<List<OChat>> getAllChats(
+    StateController<List<OChat>?> chatsController,
+  ) async {
+    chatsController.state = [];
+    final result = await _run(["--get-all-chats"]);
+    final List<OChat> chats = OChat.fromListJson(parseStringToJson(result!));
+    chatsController.state = chats;
+    return chats;
+  } // List<Chat> : Chat<id:int , name:String, summary:String >
+
+  Future<List<OMessage>> getAllMessages(
+    int id,
+    StateController<List<OMessage>> globalMessagesController,
+    StateController<bool> dbLock,
+  ) async {
+    dbLock.state = false;
+    var messages = OMessage.fromListJson(
+      parseStringToJson((await _run(["--get-all-messages", "$id"]))!),
+    );
+    globalMessagesController.state = messages;
+    dbLock.state = true;
+    return messages;
+  }
+
+  Future<String> getSummaryOfChat(int id) async {
+    return (await _run(["--get-summary-of-chat", "$id"]))!;
+  }
+
+  Future<OChat> getChatById(int id) async {
+    return OChat.fromJson(
+      parseStringToJson((await _run(["--get-chat-by-id", "$id"]))!),
+    );
+  }
+
+  Future<OMessage> createMessage(
+    String message,
+    int cId,
+    String modelName,
+    StateController<bool> dbLock,
+    StateController<List<OMessage>> allMessagesList,
+  ) async {
+    dbLock.state = false;
+    var chatMessage = OMessage.fromJson(
+      parseStringToJson(
+        (await _run([
+          "create_message",
+          "-m",
+          message,
+          "--chat-id",
+          cId.toString(),
+          "--model-name",
+          modelName,
+        ]))!,
+      ),
+    );
+    dbLock.state = true;
+    allMessagesList.state.add(chatMessage);
+    allMessagesList.update((allMessagesList) => allMessagesList);
+
+    return chatMessage;
+  }
+
+  // ------------ service_utils subcommand --------------
+  Future<void> downloadModelStream(
+    String modelNameWithTokenSize,
+    StateController controller,
+  ) async {
+    await _run([
+      "service_utils",
+      "--download-model-stream",
+      modelNameWithTokenSize,
+    ]);
+    controller.state = true;
+  }
+
+  Future<void> downloadModel(String modelNameWithTokenSize) async {
+    await _run(["service_utils", "--download-model", modelNameWithTokenSize]);
+  }
+
+  Future<void> deleteModel(String modelName) async {
+    await _run(["service_utils", "--delete-model", modelName]);
+  }
+
+  Future<Model> fetchModelByName(String name) async {
+    return Model.fromJson(
+      parseStringToJson(
+        (await _run(["service_utils", "--fetch-model-by-name", name]))!,
+      ),
+    );
+  }
+
+  Future<List<Model>> fetchModelsFromDb() async {
+    return Model.fromListJson(
+      parseStringToJson(
+        (await _run(["service_utils", "--fetch-models-from-db"]))!,
+      ),
+    );
+  }
+
+  Future<void> installTool(String sudoPassword) async {
+    await _run(["service_utils", "--install-tool", sudoPassword]);
+  }
+
+  Future<void> fetchModelsFromWebToDb() async {
+    await _run(["service_utils", "--fetch-models-from-web-to-db"]);
+  }
+
+  Future<List<Model>> getLocalModelsInfo() async {
+    return Model.fromListJson(
+      parseStringToJson(
+        (await _run(["service_utils", "--get-local-models-info"]))!,
+      ),
+    );
+  }
+
+  Future<bool?> isInstalledGlobally() async {
+    return eval((await _run(["service_utils", "--is-installed-globally"]))!);
+  }
+
+  Future<bool?> isInstalledLocally() async {
+    return eval((await _run(["service_utils", "--is-installed-locally"]))!);
+  }
+
+  Future<bool> isOllamaRunning() async {
+    var isRunning = await _run(["service_utils", "--is-ollama-running"]);
+    return eval(isRunning!);
+  }
+
+  Future<void> loadModelsFromJsonFile() =>
+      _run(["service_utils", "--load-models-from-json-file"]);
+
+  Future<void> loadModelsFromWebToJson() =>
+      _run(["service_utils", "--load-models-from-web-to-json"]);
+
+  Future startOllamaService() async {
+    return await _run(["service_utils", "--start-ollama-service"]);
+  }
+}

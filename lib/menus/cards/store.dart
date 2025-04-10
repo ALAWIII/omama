@@ -2,23 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:omama/cli_commands/data_model.dart';
+import 'package:omama/global_states.dart';
 import 'package:omama/menus/mod.dart';
 
 class StoreModelCard extends ConsumerStatefulWidget {
-  final String name;
-  final String category;
-  final String summary;
-  final String readme;
-  final List<(String, String)> varients;
+  final Model model;
 
-  const StoreModelCard({
-    super.key,
-    required this.name,
-    required this.category,
-    required this.summary,
-    required this.readme,
-    required this.varients,
-  });
+  const StoreModelCard({super.key, required this.model});
 
   @override
   ConsumerState<StoreModelCard> createState() => _StoreModelCard();
@@ -27,8 +18,9 @@ class StoreModelCard extends ConsumerStatefulWidget {
 class _StoreModelCard extends ConsumerState<StoreModelCard> {
   @override
   Widget build(BuildContext context) {
+    var _selectedTag = "";
     var mdetails = ref.read(modelDetails.notifier);
-
+    var lockDownloadButton = ref.watch(lockDownloadAvailable);
     return Container(
       margin: EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -41,18 +33,17 @@ class _StoreModelCard extends ConsumerState<StoreModelCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(widget.name),
+          Text(widget.model.name),
 
           SizedBox(height: 10),
           TextButton(
             onPressed: () {
-              mdetails.state = ModelDetalis(
-                name: widget.name,
-                summary: widget.summary,
-                readme: widget.readme,
-              );
+              mdetails.state = ModelDetalis(model: widget.model);
             },
-            child: Text(widget.summary, style: TextStyle(color: Colors.white)),
+            child: Text(
+              widget.model.summaryContent,
+              style: TextStyle(color: Colors.white),
+            ),
           ),
           SizedBox(height: 10),
           Row(
@@ -65,7 +56,7 @@ class _StoreModelCard extends ConsumerState<StoreModelCard> {
                   color: Colors.green,
                 ),
                 child: Text(
-                  widget.category,
+                  widget.model.category,
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -77,7 +68,19 @@ class _StoreModelCard extends ConsumerState<StoreModelCard> {
                   style: ButtonStyle(
                     backgroundColor: WidgetStateProperty.all(Colors.lightBlue),
                   ),
-                  onPressed: () {},
+                  onPressed:
+                      lockDownloadButton
+                          ? () {
+                            var notifyLockController = ref.read(
+                              lockDownloadAvailable.notifier,
+                            );
+                            notifyLockController.state = false;
+                            omamaCli.downloadModelStream(
+                              "${widget.model.name}:$_selectedTag",
+                              notifyLockController,
+                            );
+                          }
+                          : null,
                   child: Text(
                     "download",
                     style: TextStyle(color: Colors.white),
@@ -90,17 +93,15 @@ class _StoreModelCard extends ConsumerState<StoreModelCard> {
                   textAlign: TextAlign.center,
                   requestFocusOnTap: false,
                   textStyle: TextStyle(color: Colors.white, fontSize: 10),
-                  initialSelection: widget.varients.firstOrNull?.$1,
-                  onSelected: (v) {
-                    print(v);
-                  },
+                  initialSelection: widget.model.varients.first.toString(),
+                  onSelected: (v) => _selectedTag = v!,
 
                   dropdownMenuEntries:
-                      widget.varients.map((v) {
-                        var variant = "${v.$1}:${v.$2}";
+                      widget.model.varients.map((v) {
+                        var variant = "${v.tokenSize}:${v.size}";
                         return DropdownMenuEntry(
-                          value: v.$1,
-                          label: v.$1,
+                          value: v.tokenSize,
+                          label: v.size,
                           labelWidget: Text(variant),
                         );
                       }).toList(),

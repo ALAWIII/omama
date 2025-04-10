@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:omama/cli_commands/data_model.dart';
+import 'package:omama/global_states.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
 class ChatCard extends ConsumerStatefulWidget {
-  const ChatCard({super.key});
+  final OChat chat;
+  const ChatCard({super.key, required this.chat});
 
   @override
   ConsumerState<ChatCard> createState() => _ChatCard();
@@ -14,9 +17,10 @@ class _ChatCard extends ConsumerState<ChatCard> {
 
   @override
   Widget build(BuildContext context) {
+    var chatMessages = ref.read(allMessagesProvider.notifier);
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(5),
         border: Border.all(color: Colors.grey),
       ),
       child: Row(
@@ -25,7 +29,16 @@ class _ChatCard extends ConsumerState<ChatCard> {
           Expanded(
             child: TextButton(
               style: ButtonStyle(),
-              onPressed: () {},
+              onPressed:
+                  ref.watch(dbLock)
+                      ? () {
+                        omamaCli.getAllMessages(
+                          widget.chat.id,
+                          chatMessages,
+                          ref.read(dbLock.notifier),
+                        );
+                      }
+                      : null,
               child: Text(
                 chatName,
                 style: TextStyle(color: Colors.white),
@@ -57,6 +70,12 @@ class _ChatCard extends ConsumerState<ChatCard> {
                     onTap: () {},
                     iconWidget: Icon(Icons.delete),
                     iconColor: Colors.redAccent,
+                  ),
+                  PullDownMenuItem(
+                    title: "id : ${widget.chat.id}",
+                    onTap: null,
+                    iconWidget: Icon(Icons.info),
+                    iconColor: Colors.white,
                   ),
                 ],
             buttonBuilder:

@@ -3,20 +3,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:markdown_widget/markdown_widget.dart';
+import 'package:omama/cli_commands/data_model.dart';
 
 StateProvider<ModelDetalis?> modelDetails = StateProvider((ref) => null);
 
+// only to show summary , readme ,name
 class ModelDetalis extends ConsumerStatefulWidget {
-  final String name;
-  final String summary;
-  final String readme;
+  final Model model;
 
-  const ModelDetalis({
-    super.key,
-    required this.name,
-    required this.summary,
-    required this.readme,
-  });
+  const ModelDetalis({super.key, required this.model});
   @override
   ConsumerState<ModelDetalis> createState() => _ModelDetails();
 }
@@ -43,7 +38,7 @@ class _ModelDetails extends ConsumerState<ModelDetalis> {
             ),
             Spacer(),
             Text(
-              widget.name,
+              widget.model.name,
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.white),
             ),
@@ -51,7 +46,10 @@ class _ModelDetails extends ConsumerState<ModelDetalis> {
           ],
         ),
         SizedBox(height: 20),
-        Text(widget.summary, style: TextStyle(color: Colors.white)),
+        Text(
+          widget.model.summaryContent,
+          style: TextStyle(color: Colors.white),
+        ),
         SizedBox(height: 30),
 
         Expanded(
@@ -59,7 +57,7 @@ class _ModelDetails extends ConsumerState<ModelDetalis> {
             controller: scrollReadme,
 
             child: MarkdownBlock(
-              data: widget.readme,
+              data: widget.model.readmeContent,
               config: MarkdownConfig.darkConfig,
             ),
           ),

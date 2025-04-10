@@ -21,6 +21,7 @@ class _SideMenu extends ConsumerState<SideMenu> {
         : SizedBox.shrink(); //I don't want to repaint or rebuild anything!!
   }
 
+  //-------------------------------------
   Widget menuScreen(
     BuildContext context,
     MenuBarModels menuBar,
@@ -31,9 +32,9 @@ class _SideMenu extends ConsumerState<SideMenu> {
       width: 430,
 
       foregroundDecoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(40),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: Colors.lightBlueAccent,
+          color: Colors.blueGrey.shade600,
           strokeAlign: 5,
           width: 1,
         ),
@@ -41,7 +42,7 @@ class _SideMenu extends ConsumerState<SideMenu> {
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColor,
         border: Border.symmetric(),
-        borderRadius: BorderRadius.circular(40),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Center(child: mDetailsWatch ?? _getCurrentMenu(menuBar.name)),
     );
@@ -49,7 +50,7 @@ class _SideMenu extends ConsumerState<SideMenu> {
 
   Widget? _getCurrentMenu(String menuName) {
     return switch (menuName) {
-      "chats" => ChatsHistoryScreen(),
+      "chats" => ChatsHistoryMenu(),
       "localModels" => LocalModels(),
       "modelsStore" => ModelsStore(),
       "settings" => Settings(),

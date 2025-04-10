@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:omama/global_states.dart';
 import 'package:omama/menus/mod.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 
@@ -34,7 +35,7 @@ class _BarScreenButtonsState extends ConsumerState<BarScreenButtons> {
     final sideMenuRead = ref.read(sideMenu.notifier);
     final modDet = ref.read(modelDetails.notifier);
     final readIndex = ref.read(_selectedIndex.notifier);
-
+    final chatsList = ref.read(chatsProvider.notifier);
     return Container(
       color: Colors.grey.withAlpha(50),
       child: Column(
@@ -42,8 +43,9 @@ class _BarScreenButtonsState extends ConsumerState<BarScreenButtons> {
         children: [
           IconButton(
             color: readIndex.state == 0 ? _selectedColor : null,
-            icon: Icon(FluentIcons.reading_list_24_regular),
+            icon: Icon(FluentIcons.chat_history_20_filled),
             onPressed: () {
+              chatsList.state == null ? omamaCli.getAllChats(chatsList) : null;
               sideMenuRead.state =
                   sideMenuRead.state != MenuBarModels.chats
                       ? MenuBarModels.chats
@@ -52,6 +54,7 @@ class _BarScreenButtonsState extends ConsumerState<BarScreenButtons> {
               readIndex.state = readIndex.state != 0 ? 0 : null;
             },
           ),
+          // local models side menu
           IconButton(
             color: readIndex.state == 1 ? _selectedColor : null,
             icon: Icon(Icons.download_done),
@@ -60,6 +63,9 @@ class _BarScreenButtonsState extends ConsumerState<BarScreenButtons> {
                   sideMenuRead.state != MenuBarModels.localModels
                       ? MenuBarModels.localModels
                       : null;
+              sideMenuRead.state == MenuBarModels.localModels
+                  ? ref.refresh(localModelsProvider)
+                  : null;
               if (modDet.state != null) {
                 modDet.state = null;
               }
