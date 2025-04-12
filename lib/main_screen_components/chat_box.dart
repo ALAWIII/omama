@@ -69,9 +69,11 @@ class MessagingBox extends ConsumerStatefulWidget {
 
 class _MessagingBox extends ConsumerState<MessagingBox> {
   final textController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     var currentModel = ref.watch(loadedModel);
+    final chatIdvalue = ref.watch(chatId);
     return Container(
       padding: const EdgeInsets.all(20),
       alignment: Alignment.center,
@@ -128,11 +130,13 @@ class _MessagingBox extends ConsumerState<MessagingBox> {
                     ), //send message button
                     icon: Icon(Icons.arrow_upward),
                     onPressed:
-                        ref.watch(dbLock) && currentModel != null
+                        ref.watch(dbLock) &&
+                                currentModel != null &&
+                                chatIdvalue != null
                             ? () {
                               omamaCli.createMessage(
-                                textController.text,
-                                ref.watch(chatId),
+                                textController,
+                                chatIdvalue,
                                 currentModel,
                                 ref.read(dbLock.notifier),
                                 ref.read(allMessagesProvider.notifier),

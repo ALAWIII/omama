@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dart_eval/dart_eval.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'dart:convert';
@@ -77,7 +78,7 @@ class OmamaCli {
   }
 
   Future<OMessage> createMessage(
-    String message,
+    TextEditingController message,
     int cId,
     String modelName,
     StateController<bool> dbLock,
@@ -89,7 +90,7 @@ class OmamaCli {
         (await _run([
           "create_message",
           "-m",
-          message,
+          message.text,
           "--chat-id",
           cId.toString(),
           "--model-name",
@@ -97,6 +98,7 @@ class OmamaCli {
         ]))!,
       ),
     );
+    message.clear();
     dbLock.state = true;
     allMessagesList.state = [...allMessagesList.state, chatMessage];
 

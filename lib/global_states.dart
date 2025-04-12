@@ -4,8 +4,8 @@ import 'package:riverpod/riverpod.dart';
 
 final omamaCli = OmamaCli();
 
-final chatId = StateProvider((ref) {
-  return 0;
+final chatId = StateProvider<int?>((ref) {
+  return null;
 });
 //------------------------------------
 final dbLock = StateProvider((ref) {
