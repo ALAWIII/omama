@@ -1,10 +1,9 @@
-name: Flutter CI/CD
+name: Build & Release
 
 on:
   push:
     branches:
       - main
-
   pull_request:
     branches:
       - main
@@ -23,43 +22,56 @@ jobs:
         with:
           channel: stable
           flutter-version: 3.29.0
-      - name: Get dependencies
-        run: flutter pub get
+
       - name: Install dependencies for Linux build
         run: |
-            sudo apt-get update
-            sudo apt-get install -y \
-              clang \
-              cmake \
-              ninja-build \
-              pkg-config \
-              libgtk-3-dev \
-              libblkid-dev \
-              liblzma-dev \
-              libssl-dev \
-              libudev-dev \
-              libxcb1-dev \
-              libx11-dev \
-              libxcomposite-dev \
-              libxdamage-dev \
-              libxrandr-dev \
-              libxi-dev \
-              libxcursor-dev \
-              libxext-dev \
-              libxfixes-dev \
-              libxinerama-dev \
-              libxrender-dev \
-              libxkbcommon-dev \
-              libdbus-1-dev \
-              libgl1-mesa-dev \
-              libglu1-mesa-dev
+          sudo apt-get update
+          sudo apt-get install -y \
+            clang \
+            cmake \
+            ninja-build \
+            pkg-config \
+            libgtk-3-dev \
+            libblkid-dev \
+            liblzma-dev \
+            libssl-dev \
+            libudev-dev \
+            libxcb1-dev \
+            libx11-dev \
+            libxcomposite-dev \
+            libxdamage-dev \
+            libxrandr-dev \
+            libxi-dev \
+            libxcursor-dev \
+            libxext-dev \
+            libxfixes-dev \
+            libxinerama-dev \
+            libxrender-dev \
+            libxkbcommon-dev \
+            libdbus-1-dev \
+            libgl1-mesa-dev \
+            libglu1-mesa-dev
+
+      - name: Get dependencies
+        run: flutter pub get
+
       - name: Build Linux executable
         run: flutter build linux
+
+      - name: Zip Linux build
+        run: |
+          cd build/linux/x64/release/bundle
+          zip -r ../../../linux-build.zip .
+
+      - name: Upload Linux artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-build
+          path: build/linux-build.zip
 
   build-windows:
     name: Build for Windows
     runs-on: windows-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -69,11 +81,22 @@ jobs:
         with:
           channel: stable
           flutter-version: 3.29.0
+
       - name: Get dependencies
         run: flutter pub get
 
       - name: Build Windows executable
         run: flutter build windows
+
+      - name: Zip Windows build
+        run: |
+          Compress-Archive -Path build/windows/runner/Release/* -DestinationPath build/windows-build.zip
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-build
+          path: build/windows-build.zip
 
   release:
     name: Create GitHub Release
@@ -81,16 +104,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download Linux artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: linux-build
-          path: linux/
+          path: artifacts/linux
 
       - name: Download Windows artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: windows-build
-          path: windows/
+          path: artifacts/windows
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
@@ -100,7 +123,7 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            linux/linux-build.zip
-            windows/windows-build.zip
+            artifacts/linux/build.zip
+            artifacts/windows/build.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
