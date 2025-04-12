@@ -60,14 +60,15 @@ jobs:
 
       - name: Zip Linux build
         run: |
-          cd build/linux/x64/release/bundle
-          zip -r ../../../linux-build.zip .
+          mkdir -p dist
+          zip -r dist/linux-build.zip build/linux/x64/release/bundle/
 
       - name: Upload Linux artifact
         uses: actions/upload-artifact@v4
         with:
           name: linux-build
-          path: build/linux-build.zip
+          path: dist/linux-build.zip
+
 
   build-windows:
     name: Build for Windows
@@ -90,7 +91,8 @@ jobs:
 
       - name: Zip Windows build
         run: |
-          Compress-Archive -Path build/windows/runner/Release/* -DestinationPath build/windows-build.zip
+          New-Item -ItemType Directory -Path dist -Force
+          Compress-Archive -Path build\windows\x64\runner\Release\* -DestinationPath dist\windows-build.zip
 
       - name: Upload Windows artifact
         uses: actions/upload-artifact@v4
@@ -123,7 +125,7 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            artifacts/linux/build.zip
-            artifacts/windows/build.zip
+            linux/linux-build.zip
+            windows/windows-build.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
