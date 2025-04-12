@@ -98,7 +98,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: windows-build
-          path: build/windows-build.zip
+          path: dist/windows-build.zip
 
   release:
     name: Create GitHub Release
@@ -125,7 +125,7 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            linux/linux-build.zip
-            windows/windows-build.zip
+           artifacts/linux/linux-build.zip
+           artifacts/windows/windows-build.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
