@@ -13,27 +13,21 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
           flutter-version: 3.19.0
-
       - name: Install dependencies
         run: flutter pub get
-
       - name: Enable Linux desktop
         run: flutter config --enable-linux-desktop
-
       - name: Build Linux executable
         run: flutter build linux
-
       - name: Compress Linux build
         run: |
           cd build/linux/x64/release/bundle
           zip -r ../../../linux-build.zip .
-
       - name: Upload Linux artifact
         uses: actions/upload-artifact@v3
         with:
