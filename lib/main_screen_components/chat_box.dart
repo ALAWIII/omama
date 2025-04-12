@@ -31,6 +31,7 @@ class _ChatList extends ConsumerState<ChatList> {
     var messagesList = ref.watch(allMessagesProvider);
 
     return SmoothListView.builder(
+      reverse: true,
       duration: Duration(milliseconds: 300),
       itemCount: messagesList.length,
       controller: scrollChats,
@@ -41,7 +42,7 @@ class _ChatList extends ConsumerState<ChatList> {
             Align(
               alignment: Alignment.centerRight,
               child: MRBox(
-                message: messagesList[index].message,
+                message: messagesList[messagesList.length - 1 - index].message,
                 isResponse: false,
               ),
             ),
@@ -49,7 +50,7 @@ class _ChatList extends ConsumerState<ChatList> {
             Align(
               alignment: Alignment.centerLeft,
               child: MRBox(
-                message: messagesList[index].response,
+                message: messagesList[messagesList.length - 1 - index].response,
                 isResponse: true,
               ),
             ),

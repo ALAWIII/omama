@@ -5,19 +5,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:convert';
 
 import 'package:omama/cli_commands/data_model.dart';
-import 'package:omama/global_states.dart';
+import 'package:path/path.dart' as p;
+
+final executableDir = p.dirname(Platform.resolvedExecutable);
 
 T parseStringToJson<T>(String text) {
+  //print(text);
   return json.decode(text);
 }
 
 class OmamaCli {
-  final String executable;
+  final String executable = p.join(executableDir, 'omama_cli', 'omama_cli');
 
-  OmamaCli({
-    this.executable =
-        "/run/media/allawiii/projects/zed/Rust/omama_manager_cli/target/debug/omama_manager_cli",
-  });
+  OmamaCli();
 
   Future<String?> _run<T>(List<String> args) async {
     try {
@@ -34,9 +34,11 @@ class OmamaCli {
   }
 
   // --- Root-level options ---
-  Future<OChat> createChat() async {
+  Future<OChat> createChat(StateController<List<OChat>?> chats) async {
     final result = await _run(["--create-chat"]);
-    return OChat.fromJson(parseStringToJson(result!));
+    var chat = OChat.fromJson(parseStringToJson(result!));
+    chats.state = [...chats.state!, chat];
+    return chat;
   } // Chat
 
   Future<List<OChat>> getAllChats(
@@ -58,6 +60,7 @@ class OmamaCli {
     var messages = OMessage.fromListJson(
       parseStringToJson((await _run(["--get-all-messages", "$id"]))!),
     );
+
     globalMessagesController.state = messages;
     dbLock.state = true;
     return messages;
@@ -95,8 +98,7 @@ class OmamaCli {
       ),
     );
     dbLock.state = true;
-    allMessagesList.state.add(chatMessage);
-    allMessagesList.update((allMessagesList) => allMessagesList);
+    allMessagesList.state = [...allMessagesList.state, chatMessage];
 
     return chatMessage;
   }
@@ -131,11 +133,15 @@ class OmamaCli {
   }
 
   Future<List<Model>> fetchModelsFromDb() async {
-    return Model.fromListJson(
+    var models = Model.fromListJson(
       parseStringToJson(
         (await _run(["service_utils", "--fetch-models-from-db"]))!,
       ),
     );
+    if (models.isEmpty) {
+      await fetchModelsFromWebToDb();
+    }
+    return models;
   }
 
   Future<void> installTool(String sudoPassword) async {

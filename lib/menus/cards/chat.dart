@@ -32,6 +32,7 @@ class _ChatCard extends ConsumerState<ChatCard> {
               onPressed:
                   ref.watch(dbLock)
                       ? () {
+                        ref.read(chatId.notifier).state = widget.chat.id;
                         omamaCli.getAllMessages(
                           widget.chat.id,
                           chatMessages,

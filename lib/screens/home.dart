@@ -33,7 +33,9 @@ class _HomeScreen extends ConsumerState<HomeScreen> {
           // adding new chat
           icon: Icon(Icons.add_rounded),
           hoverColor: Colors.green,
-          onPressed: () {},
+          onPressed: () {
+            omamaCli.createChat(ref.read(chatsProvider.notifier));
+          },
         ),
         actions: [LoadedModelLabel(), SizedBox(width: 20)],
       ),

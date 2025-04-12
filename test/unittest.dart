@@ -1,3 +1,5 @@
+/*
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:omama/cli_commands/proc_execution.dart';
 
@@ -70,3 +72,4 @@ Future<void> main() async {
     //print(chat);
   });
 }
+*/

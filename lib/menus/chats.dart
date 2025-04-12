@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:omama/cli_commands/data_model.dart';
 import 'package:omama/global_states.dart';
 
 import 'package:omama/menus/cards/chat.dart';
@@ -36,7 +37,8 @@ class ChatsScrollHistory extends ConsumerStatefulWidget {
 class _ChatsScroll extends ConsumerState<ChatsScrollHistory> {
   @override
   Widget build(BuildContext context) {
-    var chatsHistory = ref.watch(chatsProvider)!;
+    List<OChat> chatsHistory = ref.watch(chatsProvider)!;
+
     return SmoothListView.builder(
       itemExtent: 50.0,
       padding: EdgeInsets.all(5),
@@ -44,7 +46,7 @@ class _ChatsScroll extends ConsumerState<ChatsScrollHistory> {
       duration: Duration(seconds: 1),
       itemCount: chatsHistory.length,
       itemBuilder: (context, index) {
-        var chat = chatsHistory[index];
+        var chat = chatsHistory[chatsHistory.length - 1 - index];
         return Padding(
           padding: EdgeInsets.only(bottom: 10),
           child: ChatCard(chat: chat),

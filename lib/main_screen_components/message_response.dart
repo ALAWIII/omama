@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:markdown_widget/config/configs.dart';
 import 'package:markdown_widget/widget/markdown_block.dart';
 
 class MRBox extends StatelessWidget {
@@ -18,7 +17,7 @@ class MRBox extends StatelessWidget {
         ),
         color: Colors.black.withAlpha(5),
       ),
-      child: MarkdownBlock(data: message, config: MarkdownConfig.darkConfig),
+      child: MarkdownBlock(data: message),
     );
   }
 }
