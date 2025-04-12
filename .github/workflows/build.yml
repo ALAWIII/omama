@@ -1,4 +1,4 @@
-name: Build Flutter App
+name: Build and Release Flutter App
 
 on:
   push:
@@ -18,19 +18,27 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: 3.29.0
+          flutter-version: 3.19.0
 
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Enable Linux desktop
+        run: flutter config --enable-linux-desktop
+
       - name: Build Linux executable
         run: flutter build linux
+
+      - name: Compress Linux build
+        run: |
+          cd build/linux/x64/release/bundle
+          zip -r ../../../linux-build.zip .
 
       - name: Upload Linux artifact
         uses: actions/upload-artifact@v3
         with:
           name: linux-build
-          path: build/linux/x64/release/bundle/
+          path: build/linux-build.zip
 
   build-windows:
     name: Build for Windows
@@ -43,19 +51,28 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: 3.29.0
+          flutter-version: 3.19.0
 
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Enable Windows desktop
+        run: flutter config --enable-windows-desktop
+
       - name: Build Windows executable
         run: flutter build windows
+
+      - name: Compress Windows build
+        run: |
+          cd build/windows/runner/Release
+          Compress-Archive -Path * -DestinationPath ../../../windows-build.zip
 
       - name: Upload Windows artifact
         uses: actions/upload-artifact@v3
         with:
           name: windows-build
-          path: build/windows/runner/Release/
+          path: build/windows-build.zip
+
   release:
     name: Create GitHub Release
     needs: [build-linux, build-windows]
@@ -73,7 +90,7 @@ jobs:
           name: windows-build
           path: windows/
 
-      - name: Create Release
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref_name }}
@@ -81,7 +98,7 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            linux/**
-            windows/**
+            linux/linux-build.zip
+            windows/windows-build.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
