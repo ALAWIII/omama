@@ -76,7 +76,7 @@
 ## 📚 References & Inspiration
 
 The RAG engine in Omama GUI is inspired by cutting-edge research:
-
+- 📘 [Rag book](https://alawiii.github.io/Rag-book/) - quick book guide.
 - 📖 [RAG Survey (2023)](https://arxiv.org/abs/2312.10997) – Overview of RAG methods and design choices.
 - 🧱 [Modular RAG (2024)](https://arxiv.org/abs/2407.21059) – Best practices for building modular RAG systems.
 - 🧠 [RAG Best Practices (2024)](https://arxiv.org/abs/2407.01219) – Techniques for scalable and robust RAG architectures.
