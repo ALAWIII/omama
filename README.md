@@ -11,15 +11,11 @@
   <img src="https://img.shields.io/badge/platform-linux%20%7C%20macOS%20%7C%20windows-green?logo=desktop-dot-com" alt="Platform">
 </p>
 
----
-
 ## ✨ Overview
 
 **Omama GUI** is a sleek and modern graphical interface that helps you manage and interact with local Ollama models. Whether you're a developer or an AI enthusiast, Omama simplifies your workflow with a powerful general-purpose Retrieval-Augmented Generation (RAG) system — no deep technical knowledge required.
 
 🔗 **Watch the Demo:** [Overview Video](https://drive.google.com/file/d/1op6VmV31YIgXQOquY2P5heADOBoffX8E/view?usp=sharing)
-
----
 
 ## 🚀 Features
 
@@ -34,6 +30,7 @@
 
 - 🧩 **Modular Architecture**
   Built to work with [Omama Manager](https://github.com/ALAWIII/omama_manager), supporting:
+
   - Indexing
   - Retrieval
   - Query Orchestration
@@ -41,8 +38,6 @@
 
 - 🌙 **Offline-First**
   Omama works fully offline with locally run LLMs using [Ollama](https://ollama.com), ensuring data privacy.
-
----
 
 ## 🛠️ Getting Started
 
@@ -62,37 +57,28 @@
 4. Close and reopen Omama GUI.
 5. You're ready to chat and explore!
 
----
-
 ## 🧩 Related Projects
 
 - [`omama-cli`](https://github.com/ALAWIII/omama_cli) – Command-line tool that bridges GUI with the backend.
 - [`omama-manager`](https://github.com/ALAWIII/omama_manager) – Core backend for RAG, retrieval, orchestration, and model logic.
 - [`ollama-models-info-fetcher`](https://github.com/ALAWIII/ollama_models_info_fetcher) – Library for fetching model metadata.
-- [`ollama-td`](https://github.com/ALAWIII/ollama_td) – Utility for downloading Ollama clients *(not used in production due to issues)*.
-
----
+- [`ollama-td`](https://github.com/ALAWIII/ollama_td) – Utility for downloading Ollama clients _(not used in production due to issues)_.
 
 ## 📚 References & Inspiration
 
 The RAG engine in Omama GUI is inspired by cutting-edge research:
+
 - 📘 [Rag book](https://alawiii.github.io/Rag-book/) - quick book guide.
 - 📖 [RAG Survey (2023)](https://arxiv.org/abs/2312.10997) – Overview of RAG methods and design choices.
 - 🧱 [Modular RAG (2024)](https://arxiv.org/abs/2407.21059) – Best practices for building modular RAG systems.
 - 🧠 [RAG Best Practices (2024)](https://arxiv.org/abs/2407.01219) – Techniques for scalable and robust RAG architectures.
-
----
 
 ## 🙌 Contributing
 
 Contributions, feature ideas, and feedback are welcome!
 Feel free to open issues or pull requests if you'd like to help improve Omama GUI.
 
----
-
 ## 📄 License
 
 This project is licensed under the **MIT License**.
 See the [LICENSE](https://github.com/ALAWIII/omama/blob/main/LICENSE) file for more details.
-
----
