@@ -15,7 +15,7 @@
 
 **Omama GUI** is a sleek and modern graphical interface that helps you manage and interact with local Ollama models. Whether you're a developer or an AI enthusiast, Omama simplifies your workflow with a powerful general-purpose Retrieval-Augmented Generation (RAG) system — no deep technical knowledge required.
 
-🔗 **Watch the Demo:** [Overview Video](https://drive.google.com/file/d/1kecKcfE6xcIu4v-5K1k3lXv9t8L5OxbQ/view?usp=sharing)
+🔗 **Watch the Demo:** ![Overview Video](https://drive.google.com/file/d/1kecKcfE6xcIu4v-5K1k3lXv9t8L5OxbQ/view?usp=sharing)
 
 ## 🚀 Features
 
